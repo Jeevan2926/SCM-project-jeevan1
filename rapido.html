@@ -144,3 +144,202 @@
 </body>
 </html>
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapido - Bike Taxi & Auto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for better aesthetics */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light grey background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 20px; /* Add some padding around the main content */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .container {
+            max-width: 500px; /* Max width for larger screens */
+            width: 100%; /* Full width on smaller screens */
+            background-color: #ffffff;
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer shadow */
+            padding: 30px; /* Increased padding */
+            box-sizing: border-box;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #ffc107; /* Rapido yellow on focus */
+        }
+        .vehicle-button {
+            flex: 1; /* Distribute space evenly */
+            padding: 12px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .vehicle-button.selected {
+            background-color: #ffc107; /* Rapido yellow */
+            border-color: #ffc107;
+            color: #1a202c; /* Dark text for contrast */
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+        }
+        .vehicle-button:hover:not(.selected) {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+        .book-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ffc107; /* Rapido yellow */
+            color: #1a202c; /* Dark text for contrast */
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+        }
+        .book-button:hover {
+            background-color: #e6b000; /* Slightly darker yellow on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+        .message-box {
+            background-color: #d4edda; /* Light green for success */
+            color: #155724; /* Dark green text */
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                border-radius: 0; /* No rounded corners on very small screens for full width */
+                box-shadow: none; /* No shadow on very small screens */
+            }
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-yellow-500 mb-2">
+                <span style="font-size: 1.2em;">&#9992;</span> Rapido
+            </h1>
+            <p class="text-gray-600 text-lg">Book your ride, hassle-free!</p>
+        </div>
+
+        <div class="mb-6">
+            <input type="text" id="pickupLocation" class="input-field" placeholder="Enter Pickup Location">
+            <input type="text" id="destinationLocation" class="input-field" placeholder="Enter Destination Location">
+        </div>
+
+        <div class="flex space-x-4 mb-8">
+            <button id="bikeBtn" class="vehicle-button selected" data-vehicle="Bike">
+                <span class="text-2xl">&#128757;</span> Bike
+            </button>
+            <button id="autoBtn" class="vehicle-button" data-vehicle="Auto">
+                <span class="text-2xl">&#128661;</span> Auto
+            </button>
+        </div>
+
+        <button id="bookRideBtn" class="book-button">Book Ride</button>
+
+        <div id="messageBox" class="message-box">
+            </div>
+    </div>
+
+    <script>
+        // Get references to DOM elements
+        const bikeBtn = document.getElementById('bikeBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const bookRideBtn = document.getElementById('bookRideBtn');
+        const pickupLocationInput = document.getElementById('pickupLocation');
+        const destinationLocationInput = document.getElementById('destinationLocation');
+        const messageBox = document.getElementById('messageBox');
+
+        let selectedVehicle = 'Bike'; // Default selected vehicle
+
+        // Function to update selected vehicle button styling
+        function selectVehicle(vehicle) {
+            selectedVehicle = vehicle;
+            if (vehicle === 'Bike') {
+                bikeBtn.classList.add('selected');
+                autoBtn.classList.remove('selected');
+            } else {
+                autoBtn.classList.add('selected');
+                bikeBtn.classList.remove('selected');
+            }
+        }
+
+        // Event listeners for vehicle selection buttons
+        bikeBtn.addEventListener('click', () => selectVehicle('Bike'));
+        autoBtn.addEventListener('click', () => selectVehicle('Auto'));
+
+        // Event listener for the Book Ride button
+        bookRideBtn.addEventListener('click', () => {
+            const pickup = pickupLocationInput.value.trim();
+            const destination = destinationLocationInput.value.trim();
+
+            if (pickup === '' || destination === '') {
+                messageBox.style.backgroundColor = '#f8d7da'; /* Light red for error */
+                messageBox.style.color = '#721c24'; /* Dark red text */
+                messageBox.style.borderColor = '#f5c6cb';
+                messageBox.textContent = 'Please enter both pickup and destination locations.';
+                messageBox.style.display = 'block';
+            } else {
+                messageBox.style.backgroundColor = '#d4edda'; /* Light green for success */
+                messageBox.style.color = '#155724'; /* Dark green text */
+                messageBox.style.borderColor = '#c3e6cb';
+                messageBox.textContent = `Booking a ${selectedVehicle} from "${pickup}" to "${destination}". Driver assigned shortly!`;
+                messageBox.style.display = 'block';
+
+                // Clear inputs after successful booking (optional)
+                pickupLocationInput.value = '';
+                destinationLocationInput.value = '';
+            }
+
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
+
