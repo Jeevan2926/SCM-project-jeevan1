@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapido - Book a Ride</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styling for focus states to match a common app feel */
+        .form-input:focus {
+            border-color: #FDBA74; /* Orange-300 */
+            box-shadow: 0 0 0 2px #FDBA74;
+        }
+        .btn-primary {
+            background-color: #F97316; /* Orange-500 */
+        }
+        .btn-primary:hover {
+            background-color: #EA580C; /* Orange-600 */
+        }
+        .vehicle-option.selected {
+            border-color: #F97316; /* Orange-500 */
+            background-color: #FFF7ED; /* Orange-50 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="h-8 w-auto mr-2 text-orange-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                </svg>
+                <h1 class="text-2xl font-bold text-orange-500">Rapido</h1>
+            </div>
+            <button class="text-gray-600 hover:text-orange-500 md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+            <nav class="hidden md:flex space-x-4">
+                <a href="#" class="text-gray-600 hover:text-orange-500">Rides</a>
+                <a href="#" class="text-gray-600 hover:text-orange-500">Profile</a>
+                <a href="#" class="text-gray-600 hover:text-orange-500">Help</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-1 bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-5 text-gray-800">Book Your Ride</h2>
+
+                <div class="mb-4">
+                    <label for="pickup" class="block text-sm font-medium text-gray-700 mb-1">Pickup Location</label>
+                    <input type="text" id="pickup" name="pickup" placeholder="Enter pickup location" class="form-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
+                </div>
+
+                <div class="mb-5">
+                    <label for="dropoff" class="block text-sm font-medium text-gray-700 mb-1">Drop-off Location</label>
+                    <input type="text" id="dropoff" name="dropoff" placeholder="Enter drop-off location" class="form-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
+                </div>
+
+                <div class="mb-5">
+                    <span class="block text-sm font-medium text-gray-700 mb-2">Select Vehicle</span>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button class="vehicle-option border border-gray-300 rounded-md p-3 text-center hover:border-orange-400 transition-all duration-150 focus:outline-none" data-vehicle="bike">
+                            <img src="https://placehold.co/40x40/F97316/FFFFFF?text=Bike" alt="Bike" class="mx-auto h-8 w-8 mb-1 rounded-full">
+                            <span class="text-xs font-medium text-gray-700">Bike</span>
+                        </button>
+                        <button class="vehicle-option border border-gray-300 rounded-md p-3 text-center hover:border-orange-400 transition-all duration-150 focus:outline-none selected" data-vehicle="auto">
+                            <img src="https://placehold.co/40x40/F97316/FFFFFF?text=Auto" alt="Auto" class="mx-auto h-8 w-8 mb-1 rounded-full">
+                            <span class="text-xs font-medium text-gray-700">Auto</span>
+                        </button>
+                        <button class="vehicle-option border border-gray-300 rounded-md p-3 text-center hover:border-orange-400 transition-all duration-150 focus:outline-none" data-vehicle="cab">
+                             <img src="https://placehold.co/40x40/F97316/FFFFFF?text=Cab" alt="Cab" class="mx-auto h-8 w-8 mb-1 rounded-full">
+                            <span class="text-xs font-medium text-gray-700">Cab</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="bookNowBtn" class="btn-primary w-full text-white font-semibold py-3 px-4 rounded-md shadow-md hover:shadow-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75">
+                    Book Now
+                </button>
+
+                <div id="messageBox" class="mt-4 p-3 rounded-md text-sm text-center hidden"></div>
+
+            </div>
+
+            <div class="md:col-span-2 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center min-h-[300px] md:min-h-full">
+                <p class="text-gray-500 text-lg">Map Area Placeholder</p>
+                </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+        <p class="text-sm">&copy; 2024 Rapido Clone. For demonstration purposes only.</p>
+    </footer>
+
+    <script>
+        // Basic interactivity for vehicle selection and booking message
+        const vehicleOptions = document.querySelectorAll('.vehicle-option');
+        const bookNowBtn = document.getElementById('bookNowBtn');
+        const messageBox = document.getElementById('messageBox');
+        let selectedVehicle = 'auto'; // Default selected vehicle
+
+        vehicleOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                vehicleOptions.forEach(opt => opt.classList.remove('selected', 'border-orange-500', 'bg-orange-50'));
+                option.classList.add('selected', 'border-orange-500', 'bg-orange-50');
+                selectedVehicle = option.dataset.vehicle;
+                console.log('Selected vehicle:', selectedVehicle);
+            });
+        });
+
+        bookNowBtn.addEventListener('click', () => {
+            const pickupLocation = document.getElementById('pickup').value;
+            const dropoffLocation = document.getElementById('dropoff').value;
+
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+
+            if (!pickupLocation || !dropoffLocation) {
+                messageBox.textContent = 'Please enter both pickup and drop-off locations.';
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            } else {
+                messageBox.textContent = `Booking ${selectedVehicle} from ${pickupLocation} to ${dropoffLocation}... (Demo)`;
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+                // In a real app, API call would be made here
+            }
+            messageBox.classList.remove('hidden');
+
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000); // Hide message after 5 seconds
+        });
+
+        // Initialize default selected vehicle visual state
+        document.querySelector('.vehicle-option[data-vehicle="auto"]').classList.add('selected', 'border-orange-500', 'bg-orange-50');
+
+    </script>
+
+</body>
+</html>
+
